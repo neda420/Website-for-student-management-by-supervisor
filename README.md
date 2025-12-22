@@ -1,25 +1,96 @@
-# StudentTrack Backend Server
+# StudentTrack - Student Management System
 
-Backend server for the StudentTrack student management system.
+A comprehensive, market-ready web application for supervisors to manage students, assistants, and document uploads with role-based access control.
 
-## Tech Stack
+## 🚀 Features
 
-- **Node.js** with Express.js
+- **Role-Based Access Control (RBAC)**: Supervisor creates assistants with granular permissions
+- **Student Management**: Create, read, update, and delete student profiles
+- **Document Upload**: Browse and upload files directly to student profiles with progress tracking
+- **Activity Dashboard**: High-level stats and real-time activity feed
+- **Responsive Design**: Fully functional on mobile and desktop
+- **Secure Authentication**: JWT-based authentication with bcrypt password hashing
+- **Real-time Feedback**: Toast notifications for all user actions
+
+## 📋 Tech Stack
+
+### Frontend
+- **React.js** (v19.2) with TypeScript
+- **React Router Dom** for navigation
+- **Bootstrap** & **React-Bootstrap** for styling
+- **Axios** for API calls
+- **React-Toastify** for notifications
+- **Vite** for build tooling
+
+### Backend
+- **Node.js** with **Express.js**
 - **MySQL** with connection pooling (mysql2)
-- **JWT** authentication
+- **JWT** for authentication
 - **Bcrypt** for password hashing
 - **Multer** for file uploads
 - **CORS** enabled
 
-## Setup Instructions
+## 📁 Project Structure
 
-### 1. Prerequisites
+```
+Website for stufdent management by supervisor/
+├── Student-management-website/          # Frontend (React + Vite)
+│   ├── src/
+│   │   ├── components/                  # React components
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Login.tsx
+│   │   │   ├── Navigation.tsx
+│   │   │   ├── StudentList.tsx
+│   │   │   ├── StudentProfile.tsx
+│   │   │   ├── StudentForm.tsx
+│   │   │   ├── FileUpload.tsx
+│   │   │   ├── UserManagement.tsx
+│   │   │   └── ProtectedRoute.tsx
+│   │   ├── context/
+│   │   │   └── AuthContext.tsx          # Authentication state
+│   │   ├── utils/
+│   │   │   └── axios.ts                 # Axios configuration
+│   │   ├── App.tsx                      # Main app with routing
+│   │   └── main.tsx
+│   ├── package.json
+│   └── vite.config.ts
+│
+└── server/                              # Backend (Node + Express)
+    ├── config/
+    │   └── database.js                  # MySQL connection pool
+    ├── controllers/
+    │   ├── authController.js
+    │   ├── userController.js
+    │   ├── studentController.js
+    │   ├── documentController.js
+    │   ├── dashboardController.js
+    │   └── activityLogController.js
+    ├── middleware/
+    │   ├── auth.js                      # JWT verification
+    │   └── permissions.js               # Permission checks
+    ├── routes/
+    │   ├── auth.js
+    │   ├── users.js
+    │   ├── students.js
+    │   ├── documents.js
+    │   └── dashboard.js
+    ├── database/
+    │   └── init.sql                     # Database schema
+    ├── uploads/                         # Uploaded files (auto-created)
+    ├── .env                             # Environment variables
+    ├── server.js                        # Main server file
+    └── package.json
+```
 
-- Node.js (v16 or higher)
-- MySQL (v8 or higher)
-- npm or yarn
+## 🛠️ Setup Instructions
 
-### 2. Database Setup
+### Prerequisites
+
+- **Node.js** (v16 or higher)
+- **MySQL** (v8 or higher)
+- **npm** or **yarn**
+
+### 1. Database Setup
 
 ```bash
 # Login to MySQL
@@ -32,154 +103,175 @@ CREATE DATABASE studenttrack;
 USE studenttrack;
 
 # Run the init.sql script
-source ./database/init.sql;
+source ./server/database/init.sql;
 
 # OR import it directly
-mysql -u root -p studenttrack < ./database/init.sql
+mysql -u root -p studenttrack < ./server/database/init.sql
 ```
 
-### 3. Environment Configuration
+### 2. Backend Setup
 
 ```bash
-# Copy the example environment file
-cp .env.example .env
+# Navigate to server directory
+cd server
 
-# Edit .env with your configuration
-# Important: Set your MySQL password and JWT secret!
-```
-
-**Required environment variables:**
-- `DB_PASSWORD` - Your MySQL password
-- `JWT_SECRET` - A secure random string (use: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`)
-
-### 4. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
+
+# Configure environment variables
+# Edit server/.env with your MySQL password
+# Important: Set DB_PASSWORD to your MySQL password
+
+# Start the server
+npm run dev    # Development mode with auto-restart
+# OR
+npm start      # Production mode
 ```
 
-### 5. Create Uploads Directory
+The backend server will start on `http://localhost:5000`
 
-The uploads directory is created automatically when the server starts, but you can create it manually:
+### 3. Frontend Setup
 
 ```bash
-mkdir uploads
-```
+# Navigate to frontend directory
+cd Student-management-website
 
-### 6. Start the Server
+# Install dependencies
+npm install
 
-**Development mode (with auto-restart):**
-```bash
+# Start the development server
 npm run dev
 ```
 
-**Production mode:**
-```bash
-npm start
-```
+The frontend will start on `http://localhost:5173`
 
-The server will start on `http://localhost:5000` by default.
+### 4. Access the Application
 
-## Default Credentials
+1. Open your browser and navigate to `http://localhost:5173`
+2. Login with default credentials:
+   - **Username**: `supervisor`
+   - **Password**: `supervisor123`
+3. **🔒 IMPORTANT**: Change the default password after first login!
 
-After running `init.sql`, a default supervisor account is created:
+## 📊 Database Schema
 
-- **Username:** `supervisor`
-- **Password:** `supervisor123`
-- **Email:** `supervisor@studenttrack.com`
+### Users Table
+- Stores supervisor and assistant credentials
+- Granular permission flags: `can_view_students`, `can_edit_student`, `can_delete_student`, `can_upload_docs`, `can_manage_users`
 
-**🔒 IMPORTANT: Change this password after first login!**
+### Students Table
+- Student profile information: name, email, department, status, GPA, assigned tasks
 
-## API Endpoints
+### Documents Table
+- File metadata linked to students via foreign key
+- Stores original filename, stored filename, file size, uploader info
 
-### Authentication
-- `POST /api/auth/login` - Login
-- `POST /api/auth/register` - Register assistant (supervisor only)
-- `GET /api/auth/me` - Get current user
+### Activity Logs Table
+- Tracks all user actions
+- Powers the dashboard "Recent Activity" feed
 
-### Users (Supervisor Only)
-- `GET /api/users` - List all assistants
-- `GET /api/users/:id` - Get specific user
-- `PUT /api/users/:id/permissions` - Update permissions
-- `DELETE /api/users/:id` - Delete assistant
+## 🔑 Default Credentials
 
-### Students
-- `GET /api/students` - List all students (with pagination)
-- `GET /api/students/:id` - Get student profile
-- `POST /api/students` - Create student
-- `PUT /api/students/:id` - Update student
-- `DELETE /api/students/:id` - Delete student
+| Username   | Password      | Role       |
+|------------|---------------|------------|
+| supervisor | supervisor123 | Supervisor |
 
-### Documents
-- `POST /api/documents/upload/:studentId` - Upload document
-- `GET /api/documents/student/:studentId` - Get student's documents
-- `GET /api/documents/download/:id` - Download document
-- `DELETE /api/documents/:id` - Delete document
+**⚠️ Change the default password immediately after first login!**
 
-### Dashboard
-- `GET /api/dashboard/stats` - Get dashboard statistics
-- `GET /api/dashboard/activities` - Get recent activities
+## 📝 Permission System
 
-## Project Structure
+Supervisors can create assistants with the following permissions:
 
-```
-server/
-├── config/
-│   └── database.js          # MySQL connection pool
-├── controllers/
-│   ├── authController.js    # Authentication logic
-│   ├── userController.js    # User management
-│   ├── studentController.js # Student CRUD
-│   ├── documentController.js# Document handling
-│   ├── dashboardController.js# Dashboard stats
-│   └── activityLogController.js# Activity logging
-├── middleware/
-│   ├── auth.js              # JWT verification
-│   └── permissions.js       # Permission checks
-├── routes/
-│   ├── auth.js              # Auth routes
-│   ├── users.js             # User routes
-│   ├── students.js          # Student routes
-│   ├── documents.js         # Document routes
-│   └── dashboard.js         # Dashboard routes
-├── database/
-│   └── init.sql             # Database schema
-├── uploads/                 # Uploaded files (auto-created)
-├── .env                     # Environment variables
-├── .env.example             # Environment template
-├── server.js                # Main server file
-├── package.json             # Dependencies
-└── README.md                # This file
-```
+- ✅ **Can View Students**: View student list and profiles
+- ✏️ **Can Edit Students**: Create and update student profiles
+- ❌ **Can Delete Students**: Delete student records
+- 📤 **Can Upload Documents**: Upload files to student profiles
+- 👥 **Can Manage Users**: Create and manage other assistants (use with caution)
 
-## Security Features
+## 🔐 Security Features
 
-- **Password Hashing:** Bcrypt with 10 salt rounds
-- **JWT Authentication:** 24-hour token expiration
-- **RBAC:** Granular permission system
-- **CORS:** Restricted to frontend URL
-- **Input Validation:** All endpoints validate inputs
-- **SQL Injection Prevention:** Parameterized queries
+- **Password Hashing**: Bcrypt with 10 salt rounds
+- **JWT Authentication**: 24-hour token expiration
+- **RBAC**: Granular permission system
+- **CORS**: Restricted to frontend URL
+- **SQL Injection Prevention**: Parameterized queries
+- **Input Validation**: All endpoints validate inputs
 
-## Troubleshooting
+## 📱 Responsive Design
+
+The application is fully responsive and works on:
+- 📱 Mobile devices (phones)
+- 📲 Tablets
+- 💻 Desktop computers
+
+## 🎨 User Experience
+
+- **Loading States**: Spinners on buttons and pages
+- **Progress Bars**: Real-time upload progress
+- **Toast Notifications**: Success/error feedback
+- **Confirmation Modals**: Before destructive actions
+- **Search & Filter**: Quick student lookup
+- **Pagination**: Efficient data browsing
+
+## 🐛 Troubleshooting
 
 ### Database connection fails
-- Check MySQL is running: `sudo service mysql status`
-- Verify credentials in `.env`
-- Check database exists: `SHOW DATABASES;`
+- ✅ Check MySQL is running
+- ✅ Verify credentials in `server/.env`
+- ✅ Ensure database exists
 
 ### File upload fails
-- Check uploads directory exists and has write permissions
-- Verify `MAX_FILE_SIZE` in `.env`
+- ✅ Check `server/uploads` directory exists
+- ✅ Verify write permissions
+- ✅ Check `MAX_FILE_SIZE` in `.env`
 
 ### CORS errors
-- Verify `FRONTEND_URL` in `.env` matches your frontend URL
-- Check browser console for specific CORS errors
+- ✅ Verify `FRONTEND_URL` in `server/.env` matches frontend URL
+- ✅ Ensure backend is running on port 5000
 
-## Development Notes
+### Port already in use
+- ✅ Backend: Change `PORT` in `server/.env`
+- ✅ Frontend: Vite will automatically suggest an alternative port
+
+## 📄 License
+
+This project is provided as-is for educational and commercial use.
+
+## 👨‍💻 Development Notes
 
 - Activity logs track all user actions automatically
 - Files are stored with unique names to prevent conflicts
 - Deleting a student cascades to documents (both DB and files)
 - Supervisor role bypasses all permission checks
 - All timestamps are in UTC
+
+## 🚀 Production Deployment
+
+1. **Build Frontend**:
+   ```bash
+   cd Student-management-website
+   npm run build
+   ```
+
+2. **Configure Environment**:
+   - Update `JWT_SECRET` with a secure random string
+   - Update `DB_PASSWORD` with your production database password
+   - Set `FRONTEND_URL` to your production frontend URL
+
+3. **Start Backend**:
+   ```bash
+   cd server
+   npm start
+   ```
+
+4. **Serve Frontend**: Use a web server like Nginx or serve the `dist` folder
+
+## 📞 Support
+
+For issues or questions, please check the documentation in:
+- `server/README.md` - Backend documentation
+- This file - Overall project documentation
+
+---
+
+**Built with ❤️ for efficient student management**
