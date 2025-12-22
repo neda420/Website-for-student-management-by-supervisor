@@ -1,0 +1,17 @@
+/* App-specific styles */
+
+.App {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Remove default App.css content */
+
+/* Fix: Toastify container blocking clicks */
+.Toastify__toast-container {
+  pointer-events: none;
+}
+
+.Toastify__toast {
+  pointer-events: auto;
+}
