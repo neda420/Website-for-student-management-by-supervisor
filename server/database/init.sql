@@ -112,7 +112,7 @@ INSERT INTO users (username, email, password, role, can_view_students, can_edit_
 VALUES (
     'supervisor',
     'supervisor@studenttrack.com',
-    '$2a$10$rGqZ0vhN5O/yxVV8OyqVeOYP0OqZyLJ6jQXqKqJVV9mYN5yJVZ9hO', -- supervisor123
+    '$2a$10$rGqZ0vhN5O/yxVV8OyqVeOYP0OqZyLJ6jQXqKqJVV9mYN5yJVZ9hO', 
     'supervisor',
     TRUE,
     TRUE,
