@@ -14,28 +14,16 @@ import { checkPermission } from '../middleware/permissions.js';
 
 const router = express.Router();
 
-// Get dashboard statistics
-router.get(
-  '/stats', 
-  verifyToken, 
-  checkPermission('can_view_students'), 
-  getDashboardStats
-);
+// 1. Apply global middleware to all routes in this router
+// This ensures every dashboard endpoint is protected without repeating code
+router.use(verifyToken);
+router.use(checkPermission('can_view_students'));
 
-// Get recent activities
-router.get(
-  '/activities', 
-  verifyToken, 
-  checkPermission('can_view_students'), 
-  getRecentActivities
-);
+// 2. Define clean routes without redundant middleware chains
+router.get('/stats', getDashboardStats);
 
-// Get activities for specific student
-router.get(
-  '/activities/student/:studentId', 
-  verifyToken, 
-  checkPermission('can_view_students'), 
-  getStudentActivities
-);
+router.get('/activities', getRecentActivities);
+
+router.get('/activities/student/:studentId', getStudentActivities);
 
 export default router;
