@@ -1,7 +1,4 @@
-/**
- * Authentication Middleware
- * Verifies JWT tokens and attaches user data to request object
- */
+
 
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
