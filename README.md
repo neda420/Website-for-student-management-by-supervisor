@@ -9,7 +9,6 @@ A comprehensive, market-ready web application for supervisors to manage students
 <img width="1911" height="1013" alt="Screenshot 2025-12-22 213336" src="https://github.com/user-attachments/assets/4e3a22ec-c79a-4c4c-b3cf-e28d3de89cba" />
 
 ## 🚀 Features
-
 - **Role-Based Access Control (RBAC)**: Supervisor creates assistants with granular permissions
 - **Student Management**: Create, read, update, and delete student profiles
 - **Document Upload**: Browse and upload files directly to student profiles with progress tracking
