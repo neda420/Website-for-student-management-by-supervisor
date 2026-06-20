@@ -1,6 +1,5 @@
 
 import pool from './server/config/database.js';
-
 async function checkDb() {
     try {
         console.log("Checking database...");
