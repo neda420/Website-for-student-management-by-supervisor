@@ -1,5 +1,6 @@
 # StudentTrack - Student Management System
 
+
 A comprehensive, market-ready web application for supervisors to manage students, assistants, and document uploads with role-based access control.
 
 <img width="1908" height="934" alt="Screenshot 2025-12-22 211134" src="https://github.com/user-attachments/assets/545650de-bfb3-4348-8a03-395a8701a251" />
